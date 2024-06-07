@@ -1,0 +1,31 @@
+﻿collection,name,type,archetype,fuel,cost,mass,thrust_asl,thrust_vac,isp_asl,isp_vac,fuelrate,vectoring
+// Stock LFOx,,,,,,,,,,,,
+stock,"LV-1 ""Ant""",liquid,orbital,lfox,110,20,510,2000,80,315,0.129,0
+stock,"LV-909 ""Terrier""",liquid,orbital,lfox,390,500,14780,60000,85,345,3.547,4
+stock,"RE-L10 ""Poodle""",liquid,orbital,lfox,1300,1750,64290,250000,90,350,14.568,4.5
+stock,"LV-1R ""Spider""",liquid,sustainer,lfox,120,20,1790,2000,260,290,0.141,10
+stock,"Mk-55 ""Thud""",liquid,sustainer,lfox,820,900,108200,120000,275,305,8.024,8
+stock,"48-7S ""Spark""",liquid,sustainer,lfox,240,130,16560,20000,265,320,1.275,3
+stock,"LV-T45 ""Swivel""",liquid,sustainer,lfox,1200,1500,167970,215000,250,320,13.703,3
+stock,"T-1 Toroidal Aerospike ""Dart""",liquid,sustainer,lfox,3850,1000,153530,180000,290,340,10.797,0
+stock,"RE-I5 ""Skipper""",liquid,sustainer,lfox,5300,3000,568750,650000,280,320,41.426,2
+stock,"KR-2L+ ""Rhino""",liquid,sustainer,lfox,25000,9000,1205880,2000000,205,340,119.968,4
+stock,"24-77 ""Twitch""",liquid,lifter,lfox,230,80,15170,16000,275,290,1.125,8
+stock,"LV-T30 ""Reliant""",liquid,lifter,lfox,1100,1250,205160,240000,265,310,15.789,0
+stock,"RE-M3 ""Mainsail""",liquid,lifter,lfox,13000,6000,1379030,1500000,285,310,98.683,2
+stock,"S3 KS-25 ""Vector""",liquid,lifter,lfox,18000,4000,936510,1000000,295,315,64.745,10.5
+stock,"S3 KS-25x4 ""Mammoth""",liquid,lifter,lfox,39000,15000,3746030,4000000,295,315,258.978,2
+// Stock monoprop,,,,,,,,,,,,
+stock,"O-10 ""Puff""",liquid,orbital,monoprop,150,90,9600,20000,120,250,2.039,6
+// Stock Ion,,,,,,,,,,,,
+stock,"IX-6315 ""Dawn""",ion,deep,xenon,8000,250,50,2000,100,4200,0.486,0
+stock,"IX-631 ""Micro Dawn""",ion,deep,xenon,2380,150,1,125,36.9,3690,0.035,0
+making_history,"RE-J10 ""Wolfhound""",liquid,deep,lfox,3000,3300,69080,375000,70,380,20.126,3
+// MH expansion,,,,,,,,,,,,
+making_history,"RE-J10 ""Wolfhound""",liquid,deep,lfox,3000,3300,69080,375000,70,380,20.126,3
+making_history,"LV-T91 ""Cheetah""",liquid,orbital,lfox,850,1000,52820,125000,150,355,7.181,4
+making_history,"RE-I2 ""Skiff""",liquid,sustainer,lfox,2300,1600,240910,300000,265,330,18.54,2
+making_history,"KE-1 ""Mastodon""",liquid,lifter,lfox,8000,5000,1283610,1350000,290,305,90.271,5
+making_history,"RV-1 ""Cub"" Vernier Engine",liquid,lifter,lfox,800,180,28900,32000,280,310,2.105,22.5
+making_history,"RK-7 ""Kodiak""",liquid,lifter,lfox,1100,1250,247000,260000,285,300,17.675,0
+making_history,"LV-TX87 ""Bobcat""",liquid,lifter,lfox,2000,2000,374190,400000,290,310,26.316,5
