@@ -1,0 +1,34 @@
+/* EnginePoint */
+
+.enginePoint {
+	position: absolute;
+	display: flex;
+	border: none;
+	background: none;
+}
+
+.enginePointDot {
+	position: absolute;
+	height: .5rem;
+	width: .5rem;
+	left: -.25rem;
+	bottom: -.25rem;
+
+	border-radius: 100%;
+	background-color: #f00;
+}
+
+button.enginePoint:hover .enginePointDot {
+	outline: 2px solid #fff;
+}
+
+.enginePointLabel {
+	position: absolute;
+	width: max-content;
+	left: 0;
+	padding: .2rem .5rem;
+}
+
+button.enginePoint:hover .enginePointLabel {
+	outline: 1px solid #fff;
+}

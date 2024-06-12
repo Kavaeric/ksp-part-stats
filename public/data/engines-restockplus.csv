@@ -1,0 +1,12 @@
+collection,internal_name,name_cpn_full,name_cpn_code,name_nick,type,archetype,fuel,cost,mass,thrust_asl,thrust_vac,isp_asl,isp_vac,fuelrate,vectoring,tech_node,tech_level,defaultsize
+// RestockPlus LFoX,,,,,,,,,,,,,,,,,,
+restockPlus,restock-engine-schnauzer-1,"LV-CT90 ""Schnauzer""",LV-CT90,Schnauzer,liquid,orbital,lfox,3000,800,22000,110000,70,350,2.884,3,veryHeavyRocketry,8,18
+restockPlus,restock-engine-375-corgi,"RE-B30 ""Corgi""",RE-B30,Corgi,liquid,orbital,lfox,4250,5250,200704,750000,95,355,19.389,4,veryHeavyRocketry,8,37
+restockPlus,restock-engine-125-pug,"LV-303 ""Pug""",LV-303,Pug,liquid,orbital,lfox,300,400,11364,25000,150,330,0.695,0,basicRocketry,2,12
+restockPlus,restock-engine-caravel-1,"RE-I3 ""Caravel""",RE-I3,Caravel,liquid,sustainer,lfox,2300,2000,422344,510000,265,320,14.627,2,heavierRocketry,6,18
+restockPlus,restock-engine-ursa-1,"LV-TK7 ""Ursa""",LV-TK7,Ursa,liquid,lifter,lfox,1100,1250,247000,260000,285,300,7.954,0,heavierRocketry,6,18
+restockPlus,restock-engine-galleon-1,"RE-M2 ""Galleon""",RE-M2,Galleon,liquid,lifter,lfox,8000,5000,1283607,1350000,290,305,40.621,5,veryHeavyRocketry,8,18
+restockPlus,restock-engine-panda-1,"24-LR-101 ""Trash Panda"" Vernier Engine",24-LR-101,Trash Panda,liquid,lifter,lfox,800,180,30400,32000,285,300,0.979,22.5,precisionPropulsion,6,r
+restockPlus,restock-engine-torch,"98-1H ""Torch""",98-1H,Torch,liquid,lifter,lfox,280,290,51271,55000,275,295,1.711,1,propulsionSystems,5,6
+restockPlus,restock-engine-125-valiant,"LV-T15 ""Valiant""",LV-T15,Valiant,liquid,lifter,lfox,500,750,88889,100000,240,270,3.399,5,basicRocketry,2,12
+restockPlus,restock-engine-boar,"RE-RK1 ""Boar""",RE-RK1,Boar,liquid,lifter,lfox,7000,3500,933333,1000000,280,300,30.591,3,veryHeavyRocketry,8,25

@@ -1,0 +1,28 @@
+/* EnginePlotter.css */
+
+.graphFrame {
+	display: grid;
+	grid-template-columns: 3rem auto;
+	grid-template-rows: auto 3rem;
+	grid-template-areas: "y-ruler plot"
+						 "corner x-ruler";
+
+	height: 50rem;
+	width: 100%;
+	box-sizing: border-box;
+	border: 1px solid rgba(255, 255, 255, .1)
+}
+
+/* Plot area */
+.graphFrame .graphPlotFrame {
+	grid-area: plot;
+	height: 100%;
+	width: 100%;
+}
+
+.graphFrame .graphPlot {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0, 0, 0, .1);
+}
