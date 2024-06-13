@@ -49,7 +49,7 @@ function EngineScatter(stats, index) {
 				labels="label"
 				labelComponent={
 					<VictoryLabel renderInPortal textAnchor="start" style={labelStyle} dx={3} dy={-3}/>
-				  }
+				}
 			/>
 		</VictoryGroup>
 
@@ -66,8 +66,6 @@ export default function Plotter({data}) {
 		engine.twr_asl = engine.thrust_asl / (engine.mass * 9.81);
 		engine.twr_vac = engine.thrust_vac / (engine.mass * 9.81);
 	}
-
-	const PlotContainer = createContainer("zoom", "voronoi");
 
 	const defaultZoom = {x: [200, 400], y: [5, 30]};
 
