@@ -5,7 +5,7 @@
 
 	color-scheme: dark;
 	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
+	background-color: #090719;
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -22,10 +22,8 @@ html, body {
 	display: flex;
 	flex-direction: column;
 
-	min-height: 100vh;
-	min-height: -webkit-fill-available;
+	height: 100vh;
+	height: -webkit-fill-available;
 	box-sizing: border-box;
 	padding: 2rem 2rem;
-
-	background-color: #222;
 }

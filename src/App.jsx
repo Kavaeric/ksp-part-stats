@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import "./assets/fonts/Iosevka.css"
 import "./App.css";
 import PartData from "./lib/PartData";
-import StatsPlot from "./lib/StatsPlot";
+import Plotter from "./lib/Plotter";
+// import StatsPlot from "./lib/StatsPlot";
 // import EnginePlotter from "./lib/EnginePlotter";
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
 	if (engineStats) {
 		return (
 			<>
-				<StatsPlot data={PartData.getEngineStats()} />
+				<Plotter data={engineStats} />
 			</>
 		)
 	} 
