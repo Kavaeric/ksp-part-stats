@@ -1,6 +1,18 @@
-import { VictoryZoomContainer, VictoryVoronoiContainer, VictoryGroup, createContainer, VictoryChart, VictoryAxis, VictoryScatter, VictoryLine, VictoryLabel } from 'victory';
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { VictoryZoomContainer,
+	VictoryVoronoiContainer,
+	VictoryGroup,
+	createContainer,
+	VictoryChart,
+	VictoryAxis,
+	VictoryScatter,
+	VictoryLine,
+	VictoryLabel, 
+	Circle} from "victory";
 
-// Styling object--should be refactored as a theme or CSS later
+import "./Plotter.css";
+
+// Styling objects--refactor these into theming or CSS later
 const plotStyle = {
 	labels: { fontSize: 12 },
 	parent: { border: "1px solid rgba(255, 255, 255, 0.1)" },
@@ -13,9 +25,6 @@ const axisStyle = {
 	axisLabel: {fontSize: 6, padding: 15, fontFamily: "Iosevka Web", fill: "rgba(255, 255, 255, 0.5"},
 	tickLabels: {fontSize: 5, padding: 5, fontFamily: "Iosevka Web", fill: "rgba(255, 255, 255, 0.5"}
 }
-const lineStyle = {
-	data: { fill: "transparent", stroke: "#f00", strokeWidth: 0.5, opacity: 0.5}
-}
 const labelStyle = {
 	fontSize: 5,
 	padding: 1,
@@ -23,43 +32,45 @@ const labelStyle = {
 	fill: "rgba(255, 255, 255, 0.8)"
 }
 
-function EngineScatter(stats, index) {
+// Engine plotting component. Each engine needs to be plotted based on its stats at at least two contexts
+function EngineScatter(engineStats, index) {
 
-	const engineStats = [
-		{isp: stats.isp_asl, twr: stats.twr_asl, label: null},
-		{isp: stats.isp_vac, twr: stats.twr_vac, label: stats.name_nick},
+	const enginePerformance = [
+		{isp: engineStats.isp_asl, twr: engineStats.twr_asl},
+		{isp: engineStats.isp_vac, twr: engineStats.twr_vac},
 	];
 
 	return (
 		<VictoryGroup key = {index}>
 			<VictoryLine
-				data={engineStats}
+				data={enginePerformance}
 				x = "isp"
 				y = "twr"
-				style = {{ data: {fill: "transparent", stroke: "#f00", strokeWidth: stats.cost**0.4*0.5, strokeLinecap: "round", opacity: 0.1 }}}
+				style = {{ data: {fill: "transparent", stroke: "#f00", strokeWidth: 1, strokeLinecap: "round", opacity: 0.5 }}}
 			/>
+
 			<VictoryScatter
 				// Plot the engine data with TWR on the y-axis and ISP on the x-axis
-				data={engineStats}
-				x = "isp"
-				y = "twr"
-				size = {0.1}
+				data={[[engineStats.isp_vac, engineStats.twr_vac]]}
+				x = {0}
+				y = {1}
+				// Size expects a diameter, but we need to represent these as area
+				size = {Math.sqrt(engineStats.cost) * 0.05}
 				style = {scatterStyle}
-				
-				labels="label"
+
+				labels={engineStats.name_nick}
 				labelComponent={
 					<VictoryLabel renderInPortal textAnchor="start" style={labelStyle} dx={3} dy={-3}/>
 				}
 			/>
 		</VictoryGroup>
-
 	)
-
 }
 
+// Main scatter plot...plotter
 export default function Plotter({data}) {
 
-	const engineData = data;
+	const [engineData, setEngineData] = useState(data);
 
 	// Calculate TWR of all our engines
 	for (let engine of engineData) {
@@ -67,34 +78,42 @@ export default function Plotter({data}) {
 		engine.twr_vac = engine.thrust_vac / (engine.mass * 9.81);
 	}
 
-	const defaultZoom = {x: [200, 400], y: [5, 30]};
+	const targetRef = useRef(null);
+
+	const defaultZoom = {x: [150, 400], y: [0, 30]};
 
 	return (
 		<VictoryChart
-		domain = {{ x: [0, 5000], y: [0, 50] }}
-		style = {plotStyle}
-		containerComponent = {<VictoryZoomContainer
-								zoomDomain={defaultZoom}
-								allowZoom={false}
-								minimumZoom={{x: 20, y: 10}} />}
+			domain = {{ x: [0, 5000], y: [0, 50] }}
+			domainPadding={{ x: 25 }}
+			padding={{ top: 50, bottom: 50, right: 50, left: 50 }}
+			style = {plotStyle}
+			containerComponent = {
+				<VictoryZoomContainer
+				className = "engineScatterPlot"
+				disableInlineStyles = {true}
+				zoomDomain={defaultZoom}
+				allowZoom={false}
+				minimumZoom={{x: 20, y: 10}} />
+			}
 		>
 		
 			<VictoryAxis
 				// X-axis
 				domain = {[0, 400]}
-				label="Isp (axisStyle)"
+				label="Specific impulse (Isp)"
 				style={axisStyle}
 			/>
 			<VictoryAxis dependentAxis
 				// Y-axis
 				domain = {[0, 30]}
-				label="TWR (vacuum)"
+				label="Thrust-to-weight ratio (TWR)"
 				style={axisStyle}
 			/>
 
 			{
 				engineData
-					? engineData.map((engine, index) => EngineScatter(engine, index))
+					? engineData.map((engineStats, index) => EngineScatter(engineStats, index))
 					: ""
 			}
 

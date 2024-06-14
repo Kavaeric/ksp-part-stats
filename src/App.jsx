@@ -8,12 +8,11 @@ import Plotter from "./lib/Plotter";
 
 function App() {
 
-	const [engineStats, setEngineStats] = useState([]);
+	const [engineStats, setEngineStats] = useState(null);
 
 	// Will run any enclosed function when a dependency changes
 	// This one has no dependencies so it'll run once on startup
 	useEffect(() => {
-
 		PartData.initaliseData().then((values) => {
 			setEngineStats(PartData.getEngineStats());
 		});
@@ -22,18 +21,11 @@ function App() {
 	// This won't change, though, so it'll just run once on startup
 	},[]);
 
-	if (engineStats) {
-		return (
-			<>
-				<Plotter data={engineStats} />
-			</>
-		)
-	} 
-	else {
-		return (
-			<p>Loading...</p>
-		)
-	}
+	return (
+		engineStats
+			? <Plotter data={engineStats} />
+			: <p>Loading...</p>
+	)
 };
 
 export default App;
