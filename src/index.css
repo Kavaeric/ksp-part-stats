@@ -20,10 +20,13 @@ html, body {
 
 #pageContainer {
 	display: flex;
-	flex-direction: column;
-
 	height: 100vh;
-	height: -webkit-fill-available;
+	flex-direction: column;
 	box-sizing: border-box;
 	padding: 2rem 2rem;
+}
+
+/* Wrapper for the plot itself */
+.plotContainer {
+	height: 100%;
 }

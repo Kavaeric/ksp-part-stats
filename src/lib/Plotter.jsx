@@ -1,76 +1,20 @@
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
-import { VictoryZoomContainer,
-	VictoryVoronoiContainer,
-	VictoryGroup,
-	createContainer,
-	VictoryChart,
-	VictoryAxis,
-	VictoryScatter,
-	VictoryLine,
-	VictoryLabel, 
-	Circle} from "victory";
+
+import * as Scale from "@visx/scale";
+import { Circle, Line } from "@visx/shape";
+import { useParentSize, ParentSize } from "@visx/responsive";
+import { AxisLeft, AxisBottom } from "@visx/axis";
+import { Text } from "@visx/text";
 
 import "./Plotter.css";
-
-// Styling objects--refactor these into theming or CSS later
-const plotStyle = {
-	labels: { fontSize: 12 },
-	parent: { border: "1px solid rgba(255, 255, 255, 0.1)" },
-}
-const scatterStyle = {
-	data: { fill: "#f00", stroke: "transparent", strokeWidth: 0, opacity: 0.8 }
-}
-const axisStyle = {
-	axis: {stroke: "rgba(255, 255, 255, 0.5)"},
-	axisLabel: {fontSize: 6, padding: 15, fontFamily: "Iosevka Web", fill: "rgba(255, 255, 255, 0.5"},
-	tickLabels: {fontSize: 5, padding: 5, fontFamily: "Iosevka Web", fill: "rgba(255, 255, 255, 0.5"}
-}
-const labelStyle = {
-	fontSize: 5,
-	padding: 1,
-	fontFamily: "Iosevka Web",
-	fill: "rgba(255, 255, 255, 0.8)"
-}
-
-// Engine plotting component. Each engine needs to be plotted based on its stats at at least two contexts
-function EngineScatter(engineStats, index) {
-
-	const enginePerformance = [
-		{isp: engineStats.isp_asl, twr: engineStats.twr_asl},
-		{isp: engineStats.isp_vac, twr: engineStats.twr_vac},
-	];
-
-	return (
-		<VictoryGroup key = {index}>
-			<VictoryLine
-				data={enginePerformance}
-				x = "isp"
-				y = "twr"
-				style = {{ data: {fill: "transparent", stroke: "#f00", strokeWidth: 1, strokeLinecap: "round", opacity: 0.5 }}}
-			/>
-
-			<VictoryScatter
-				// Plot the engine data with TWR on the y-axis and ISP on the x-axis
-				data={[[engineStats.isp_vac, engineStats.twr_vac]]}
-				x = {0}
-				y = {1}
-				// Size expects a diameter, but we need to represent these as area
-				size = {Math.sqrt(engineStats.cost) * 0.05}
-				style = {scatterStyle}
-
-				labels={engineStats.name_nick}
-				labelComponent={
-					<VictoryLabel renderInPortal textAnchor="start" style={labelStyle} dx={3} dy={-3}/>
-				}
-			/>
-		</VictoryGroup>
-	)
-}
 
 // Main scatter plot...plotter
 export default function Plotter({data}) {
 
 	const [engineData, setEngineData] = useState(data);
+
+	// Sets up a system to use parent size of container
+	const { parentRef, width, height } = useParentSize({ debounceTime: 150 });
 
 	// Calculate TWR of all our engines
 	for (let engine of engineData) {
@@ -78,45 +22,115 @@ export default function Plotter({data}) {
 		engine.twr_vac = engine.thrust_vac / (engine.mass * 9.81);
 	}
 
-	const targetRef = useRef(null);
+	// Accessor functions for mapping the data to an X and Y value
+	function dataX (data) { 
+		return data.isp_vac;
+	}
+	function dataY (data) { 
+		return data.twr_vac;
+	}
 
-	const defaultZoom = {x: [150, 400], y: [0, 30]};
+	// Define our scales
+	const xScale = Scale.scaleLinear({
+		domain: [0, 400], // Data's min and max x-coordinate values
+		range: [0, width], // Drawn graph's left and right extents
+		round: true
+	})
+	const yScale = Scale.scaleLinear({
+		domain: [0, 30], // Data's min and max x-coordinate values
+		range: [height, 0], // Drawn graph's left and right extents; remember a graph's y-scale goes bottom to top
+		round: true
+	})
+
+	// Compose scale and accessor functions to get point functions
+	const compose = (scale, accessor) => engineData => scale(accessor(engineData));
+	const xPoint = compose(xScale, dataX);
+	const yPoint = compose(yScale, dataY);
+
+	console.log(engineData.length);
 
 	return (
-		<VictoryChart
-			domain = {{ x: [0, 5000], y: [0, 50] }}
-			domainPadding={{ x: 25 }}
-			padding={{ top: 50, bottom: 50, right: 50, left: 50 }}
-			style = {plotStyle}
-			containerComponent = {
-				<VictoryZoomContainer
-				className = "engineScatterPlot"
-				disableInlineStyles = {true}
-				zoomDomain={defaultZoom}
-				allowZoom={false}
-				minimumZoom={{x: 20, y: 10}} />
-			}
-		>
-		
-			<VictoryAxis
-				// X-axis
-				domain = {[0, 400]}
-				label="Specific impulse (Isp)"
-				style={axisStyle}
-			/>
-			<VictoryAxis dependentAxis
-				// Y-axis
-				domain = {[0, 30]}
-				label="Thrust-to-weight ratio (TWR)"
-				style={axisStyle}
+		<div ref={parentRef} className="plotContainer">
+			<svg 
+				className = "engineScatterChart"
+				// <ParentSize> Passes its dimensions so the plot can responsively scale
+				width = {width}
+				height = {height}
+			>
+
+			<rect
+				// Background colour
+				className = "background"
+				width = {parent.width}
+				height = {parent.height}
 			/>
 
 			{
-				engineData
-					? engineData.map((engineStats, index) => EngineScatter(engineStats, index))
-					: ""
+				engineData.map((engine, index) => { return (
+					<>
+					<Circle
+						key = { `point-${index}` }
+						className = "point"
+						cx = { xPoint(engine) }
+						cy = { yPoint(engine) }
+						r = { Math.sqrt(engine.cost) * 0.2 }
+						fill = "red"
+						opacity = { 0.5 }
+					/>
+
+					<Line
+						key = { `line-${index}` }
+						className = "point"
+						from = {{ x: xScale(engine.isp_asl), y: yScale(engine.twr_asl) }}
+						to = {{ x: xScale(engine.isp_vac), y: yScale(engine.twr_vac) }}
+						stroke = "red"
+						opacity = { 0.3 }
+						strokeWidth= { 2 }
+					/>
+					</>
+				)})
 			}
 
-		</VictoryChart>
+			{
+				engineData.map((engine, index) => { return (
+					<>
+					<Text
+						key = { `label-${index}` }
+						verticalAnchor="end"
+						x = { xPoint(engine) + 8}
+						y = { yPoint(engine) - 8}
+						fill = "white"
+					>
+						{engine.name_nick}
+					</Text>
+					</>
+				)})
+			}
+
+			<AxisBottom 
+				scale = { xScale }
+				left = { 0 }
+				top = { height - 100 }
+				rangePadding= { 100 } 
+				label = { "Specific impulse (isp)" }
+				stroke = { "#fff" }
+				tickStroke = { "#fff" }
+				tickLabelProps = {{ fill: "#fff", fontSize: 16, fontFamily: "Iosevka Web" }}
+				labelProps = {{ fill: "#fff", fontSize: 16, fontFamily: "Iosevka Web" }}
+			/>
+
+			<AxisLeft
+				scale = { yScale }
+				top = { 0 }
+				left = { 100 }
+				label = { "Thrust-to-weight ratio (TWR)" }
+				stroke = { "#fff" }
+				tickStroke = { "#fff" }
+				tickLabelProps = {{ fill: "#fff", fontSize: 16, fontFamily: "Iosevka Web" }}
+				labelProps = {{ fill: "#fff", fontSize: 16, fontFamily: "Iosevka Web" }}
+			/>
+
+		</svg>
+		</div>
 	)
 }

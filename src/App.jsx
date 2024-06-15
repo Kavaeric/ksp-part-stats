@@ -23,8 +23,8 @@ function App() {
 
 	return (
 		engineStats
-			? <Plotter data={engineStats} />
-			: <p>Loading...</p>
+		? <Plotter data={engineStats} />
+		: <p>Loading...</p>
 	)
 };
 

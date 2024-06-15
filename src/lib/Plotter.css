@@ -1,13 +1,7 @@
 /* Plotter.css */
 
-.engineScatterPlot {
-	flex: 1;
-	height: 100%;
-	width: 100%;
-	background-color: rgba(255, 0, 0, 0.1);
-}
-
-.engineScatterPlot > svg {
-	height: 100%;
-	width: 100%;
+.engineScatterChart .background {
+	stroke: rgba(255, 255, 255, .1);
+	stroke-width: .1rem;
+	fill: rgba(0, 0, 0, .1);
 }
