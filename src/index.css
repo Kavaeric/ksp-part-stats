@@ -25,8 +25,3 @@ html, body {
 	box-sizing: border-box;
 	padding: 2rem 2rem;
 }
-
-/* Wrapper for the plot itself */
-.plotContainer {
-	height: 100%;
-}

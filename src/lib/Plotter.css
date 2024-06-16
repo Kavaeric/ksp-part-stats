@@ -1,7 +1,38 @@
 /* Plotter.css */
 
-.engineScatterChart .background {
+/* Wrapper for the plot itself */
+div.plotContainer {
+	width: 100%;
+	height: 100%;
+
+	display: grid;
+	grid-template-columns: 4% 4% 92%;
+	grid-template-rows: 92% 4% 4%;
+	grid-template-areas: "yScale yRuler plot"
+			   			 "corner corner xRuler"
+						 "corner corner xScale";
+}
+
+div.plotAreaContainer {
+	grid-area: plot;
+	height: 100%;
+	width: 100%;
+}
+
+svg.plotArea .background {
 	stroke: rgba(255, 255, 255, .1);
 	stroke-width: .1rem;
 	fill: rgba(0, 0, 0, .1);
+}
+
+div.plotXRulerContainer {
+	grid-area: xRuler;
+	height: 100%;
+	width: 100%;
+}
+
+div.plotYRulerContainer {
+	grid-area: yRuler;
+	height: 100%;
+	width: 100%;
 }

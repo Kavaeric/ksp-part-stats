@@ -4,23 +4,28 @@ import * as Scale from "@visx/scale";
 import { Circle, Line } from "@visx/shape";
 import { useParentSize, ParentSize } from "@visx/responsive";
 import { AxisLeft, AxisBottom } from "@visx/axis";
+import { Grid } from "@visx/grid"
 import { Text } from "@visx/text";
 
 import "./Plotter.css";
 
 // Main scatter plot...plotter
-export default function Plotter({data}) {
+export default function Plotter(plotterProps) {
 
-	const [engineData, setEngineData] = useState(data);
-
-	// Sets up a system to use parent size of container
-	const { parentRef, width, height } = useParentSize({ debounceTime: 150 });
+	// Save the engine data to a local state variable
+	const [engineData, setEngineData] = useState(plotterProps.newData);
 
 	// Calculate TWR of all our engines
 	for (let engine of engineData) {
 		engine.twr_asl = engine.thrust_asl / (engine.mass * 9.81);
 		engine.twr_vac = engine.thrust_vac / (engine.mass * 9.81);
 	}
+
+	// Height and width of main plotting area
+	const { parentRef: plotAreaParentRef, width: plotWidth, height: plotHeight } = useParentSize({ debounceTime: 150 });
+
+	// Height and width of y-axis rulers (vertical)
+	const { parentRef: yRulerParentRef, width: yRulerWidth, height: yRulerHeight } = useParentSize({ debounceTime: 150 });
 
 	// Accessor functions for mapping the data to an X and Y value
 	function dataX (data) { 
@@ -33,12 +38,12 @@ export default function Plotter({data}) {
 	// Define our scales
 	const xScale = Scale.scaleLinear({
 		domain: [0, 400], // Data's min and max x-coordinate values
-		range: [0, width], // Drawn graph's left and right extents
+		range: [0, plotWidth], // Drawn graph's left and right extents
 		round: true
 	})
 	const yScale = Scale.scaleLinear({
 		domain: [0, 30], // Data's min and max x-coordinate values
-		range: [height, 0], // Drawn graph's left and right extents; remember a graph's y-scale goes bottom to top
+		range: [plotHeight, 0], // Drawn graph's left and right extents; remember a graph's y-scale goes bottom to top
 		round: true
 	})
 
@@ -50,19 +55,27 @@ export default function Plotter({data}) {
 	console.log(engineData.length);
 
 	return (
-		<div ref={parentRef} className="plotContainer">
+		<div className="plotContainer">
+		<div ref={plotAreaParentRef} className="plotAreaContainer">
 			<svg 
-				className = "engineScatterChart"
-				// <ParentSize> Passes its dimensions so the plot can responsively scale
-				width = {width}
-				height = {height}
+				className = "plotArea"
+				width = {plotWidth}
+				height = {plotHeight}
 			>
 
 			<rect
 				// Background colour
 				className = "background"
-				width = {parent.width}
-				height = {parent.height}
+				width = {plotWidth}
+				height = {plotHeight}
+			/>
+
+			<Grid
+				xScale = {xScale}
+				yScale = {yScale}
+				width = {plotWidth}
+				height = {plotHeight}
+				stroke = {"rgba(255, 255, 255, 0.1)"}
 			/>
 
 			{
@@ -106,31 +119,34 @@ export default function Plotter({data}) {
 					</>
 				)})
 			}
+			</svg>
+		</div>
 
-			<AxisBottom 
-				scale = { xScale }
-				left = { 0 }
-				top = { height - 100 }
-				rangePadding= { 100 } 
-				label = { "Specific impulse (isp)" }
-				stroke = { "#fff" }
-				tickStroke = { "#fff" }
-				tickLabelProps = {{ fill: "#fff", fontSize: 16, fontFamily: "Iosevka Web" }}
-				labelProps = {{ fill: "#fff", fontSize: 16, fontFamily: "Iosevka Web" }}
-			/>
+		<div ref={yRulerParentRef} className="plotYRulerContainer">
+			<svg width={"100%"} height={plotHeight} className="yRuler">
+				<AxisLeft
+					scale = { yScale }
+					top = { 0 }
+					left = { yRulerWidth }
+					hideAxisLine = { true }
+					hideTicks = { true }
+					tickLabelProps = {{ fill: "#fff", fontSize: 16, fontFamily: "Iosevka Web"}}
+				/>
+			</svg>
+		</div>
 
-			<AxisLeft
-				scale = { yScale }
-				top = { 0 }
-				left = { 100 }
-				label = { "Thrust-to-weight ratio (TWR)" }
-				stroke = { "#fff" }
-				tickStroke = { "#fff" }
-				tickLabelProps = {{ fill: "#fff", fontSize: 16, fontFamily: "Iosevka Web" }}
-				labelProps = {{ fill: "#fff", fontSize: 16, fontFamily: "Iosevka Web" }}
-			/>
-
-		</svg>
+		<div className="plotXRulerContainer">
+			<svg width={plotWidth} height={"100%"} className="xRuler">
+				<AxisBottom
+					scale = { xScale }
+					left = { 0 }
+					top = { 0 }
+					hideAxisLine = { true }
+					hideTicks = { true }
+					tickLabelProps = {{ fill: "#fff", fontSize: 16, fontFamily: "Iosevka Web" }}
+				/>
+			</svg>
+		</div>
 		</div>
 	)
 }
