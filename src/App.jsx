@@ -22,9 +22,12 @@ function App() {
 	},[]);
 
 	return (
-		engineStats
-		? <Plotter newData={engineStats} />
-		: <p>Loading...</p>
+		<>
+			{ engineStats
+				? <Plotter newData={engineStats} />
+				: <p>Loading...</p>
+			}
+		</>
 	)
 };
 
