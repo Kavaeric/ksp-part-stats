@@ -111,14 +111,14 @@ export default function Plotter(plotterProps) {
 					left = {chartMargin}	
 				>
 					<XYChart 
-						width = {chartWidth}
-						height = {chartHeight}
+						width = {chartPlotWidth}
+						height = {chartPlotHeight}
 						xScale = {xScale}
 						yScale = {yScale}
 					>
 						<rect
 							// Background colour
-							className = "background"
+							className = "plotBackground"
 							width = {chartPlotWidth}
 							height = {chartPlotHeight}
 						/>
@@ -240,7 +240,7 @@ export default function Plotter(plotterProps) {
 									key = { `xBrushPoint-${index}` }
 									cx = { xBrushScale(engine.isp_vac) }
 									cy = { brushNavSize/2 }
-									r = { Math.pow(engine.cost, 1/4) }
+									r = { Math.pow(engine.cost, 1/5) }
 									fill = "red"
 									opacity = { 0.5 }
 								/>
@@ -250,7 +250,6 @@ export default function Plotter(plotterProps) {
 									from = {{ x: xBrushScale(engine.isp_asl), y: brushNavSize/2 }}
 									to = {{ x: xBrushScale(engine.isp_vac), y: brushNavSize/2 }}
 									stroke = "red"
-									strokeLinecap = "round"
 									opacity = { 0.02 }
 									strokeWidth= { brushNavSize/2 }
 								/>
@@ -302,7 +301,7 @@ export default function Plotter(plotterProps) {
 									key = { `yBrushPoint-${index}` }
 									cx = { brushNavSize/2 }
 									cy = { yBrushScale(engine.twr_vac) }
-									r = { Math.pow(engine.cost, 1/4) }
+									r = { Math.pow(engine.cost, 1/5) }
 									fill = "red"
 									opacity = { 0.5 }
 								/>
@@ -312,7 +311,6 @@ export default function Plotter(plotterProps) {
 									from = {{ x: brushNavSize/2, y: yBrushScale(engine.twr_asl) }}
 									to = {{ x: brushNavSize/2, y: yBrushScale(engine.twr_vac) }}
 									stroke = "red"
-									strokeLinecap = "round"
 									opacity = { 0.02 }
 									strokeWidth= { brushNavSize/2 }
 								/>

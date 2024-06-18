@@ -19,8 +19,9 @@ div.plotAreaContainer {
 	width: 100%;
 }
 
-svg.plot .background {
+svg.plot .plotBackground {
 	fill: rgba(0, 0, 0, 0.1);
+	stroke: rgba(255, 255, 255, 0.1);
 }
 
 div.plotXRulerContainer {
